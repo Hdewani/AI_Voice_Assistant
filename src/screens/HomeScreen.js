@@ -13,6 +13,7 @@ import {
 import Features from '../components/features'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { dummyMessages } from '../constants';
+import Voice from '@react-native-community/voice';
 
 
 export default function HomeScreen() {
@@ -22,6 +23,47 @@ export default function HomeScreen() {
     const [messages, setMessages] = useState(dummyMessages);
     const [speaking, setSpeaking] = useState(true);
     const scrollViewRef = useRef();
+
+
+    const speechStartHandler = e => {
+        console.log('speech start event', e);
+    };
+    const speechEndHandler = e => {
+        setRecording(false);
+        console.log('speech stop event', e);
+    };
+    const speechResultsHandler = e => {
+        console.log('speech event: ', e);
+        // const text = e.value[0];
+        // setResult(text);
+
+    };
+
+    const speechErrorHandler = e => {
+        console.log('speech error: ', e);
+    }
+
+
+    const startRecording = async () => {
+        setRecording(true);
+        // Tts.stop();
+        try {
+            await Voice.start('en-US'); // en-US
+
+        } catch (error) {
+            console.log('error', error);
+        }
+    };
+    const stopRecording = async () => {
+
+        try {
+            await Voice.stop();
+            setRecording(false);
+            // fetchResponse();
+        } catch (error) {
+            console.log('error', error);
+        }
+    };
 
     const clear = () => {
         // Tts.stop();
@@ -34,6 +76,28 @@ export default function HomeScreen() {
         // Tts.stop();
         setSpeaking(false);
     }
+
+    useEffect(() => {
+
+        // voice handler events
+        Voice.onSpeechStart = speechStartHandler;
+        Voice.onSpeechEnd = speechEndHandler;
+        Voice.onSpeechResults = speechResultsHandler;
+        Voice.onSpeechError = speechErrorHandler;
+
+        // // text to speech events
+        // Tts.setDefaultLanguage('en-IE');
+        // Tts.addEventListener('tts-start', event => console.log('start', event));
+        // Tts.addEventListener('tts-finish', event => { console.log('finish', event); setSpeaking(false) });
+        // Tts.addEventListener('tts-cancel', event => console.log('cancel', event));
+
+
+
+        return () => {
+            // destroy the voice instance after component unmounts
+            Voice.destroy().then(Voice.removeAllListeners);
+        };
+    }, []);
 
     return (
         <View className="flex-1 bg-white">
@@ -127,8 +191,8 @@ export default function HomeScreen() {
                         // ) :
                         recording ? (
                             <TouchableOpacity
-                            // className="space-y-2"
-                            // onPress={stopRecording}
+                                // className="space-y-2"
+                                onPress={stopRecording}
                             >
                                 {/* recording stop button */}
                                 <Image
@@ -140,7 +204,7 @@ export default function HomeScreen() {
 
                         ) : (
                             <TouchableOpacity
-                            // onPress={startRecording}
+                                onPress={startRecording}
                             >
                                 {/* recording start button */}
                                 <Image
