@@ -20,7 +20,7 @@ export default function HomeScreen() {
     const [recording, setRecording] = useState(false);
     const [loading, setLoading] = useState(false);
     const [messages, setMessages] = useState(dummyMessages);
-    const [speaking, setSpeaking] = useState(false);
+    const [speaking, setSpeaking] = useState(true);
     const scrollViewRef = useRef();
 
     const clear = () => {
@@ -29,6 +29,11 @@ export default function HomeScreen() {
         // setLoading(false);
         setMessages([]);
     };
+
+    const stopSpeaking = () => {
+        // Tts.stop();
+        setSpeaking(false);
+    }
 
     return (
         <View className="flex-1 bg-white">
@@ -159,7 +164,7 @@ export default function HomeScreen() {
                     {
                         speaking && (
                             <TouchableOpacity
-                                // onPress={stopSpeaking}
+                                onPress={stopSpeaking}
                                 className="bg-red-400 rounded-3xl p-2 absolute left-10"
                             >
                                 <Text className="text-white font-semibold">Stop</Text>
