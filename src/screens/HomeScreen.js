@@ -14,6 +14,7 @@ import Features from '../components/features'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { dummyMessages } from '../constants';
 import Voice from '@react-native-community/voice';
+import { apiCall } from '../api/openAi';
 
 
 export default function HomeScreen() {
@@ -55,15 +56,23 @@ export default function HomeScreen() {
         }
     };
     const stopRecording = async () => {
-
         try {
-            await Voice.stop();
+            await Voice.stop(); // Assuming Voice.stop() works as expected
             setRecording(false);
-            // fetchResponse();
+            fetchResponse(); // This will call fetchResponse immediately after stopping recording, which seems fine.
         } catch (error) {
             console.log('error', error);
         }
     };
+
+    const fetchResponse = async () => {
+        if (result.trim().length > 0) { // Make sure 'result' is defined somewhere
+            setLoading(true);
+            let newMessages = [...messages];
+            newMessages.push({ role: 'user', content: result.trim() });
+            setMessages([...newMessages]);
+        }
+    }
 
     const clear = () => {
         // Tts.stop();
