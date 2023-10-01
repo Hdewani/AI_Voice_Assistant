@@ -76,16 +76,16 @@ export default function HomeScreen() {
             setMessages([...newMessages]);
 
             // scroll to the bottom of the view
-            // updateScrollView();   
+            updateScrollView();
 
             // fetching response from chatGPT with our prompt and old messages
             apiCall(result.trim(), newMessages).then(res => {
                 console.log('got api data', res);
-                // setLoading(false);
+                setLoading(false);
                 if (res.success) {
                     setMessages([...res.data]);
                     setResult('');
-                    // updateScrollView();
+                    updateScrollView();
 
                     // now play the response to user
                     startTextToSpeach(res.data[res.data.length - 1]);
@@ -96,6 +96,12 @@ export default function HomeScreen() {
 
             })
         }
+    }
+
+    const updateScrollView = () => {
+        setTimeout(() => {
+            scrollViewRef?.current?.scrollToEnd({ animated: true });
+        }, 200)
     }
 
     const clear = () => {
@@ -153,7 +159,7 @@ export default function HomeScreen() {
                                 style={{ height: hp(58) }}
                                 className="bg-neutral-300 rounded-3xl p-4">
                                 <ScrollView
-                                    // ref={scrollViewRef}
+                                    ref={scrollViewRef}
                                     bounces={false}
                                     className="space-y-4"
                                     showsVerticalScrollIndicator={false}
@@ -218,37 +224,37 @@ export default function HomeScreen() {
                 {/* recording, clear and stop buttons */}
                 <View className="flex justify-center items-center">
                     {
-                        // loading ? (
-                        //     <Image
-                        //         source={require('../../assets/images/loading.gif')}
-                        //         style={{ width: hp(10), height: hp(10) }}
-                        //     />
-                        // ) :
-                        recording ? (
-                            <TouchableOpacity
-                                // className="space-y-2"
-                                onPress={stopRecording}
-                            >
-                                {/* recording stop button */}
-                                <Image
-                                    className="rounded-full"
-                                    source={require('../../assets/images/voiceLoading.gif')}
-                                    style={{ width: hp(10), height: hp(10) }}
-                                />
-                            </TouchableOpacity>
+                        loading ? (
+                            <Image
+                                source={require('../../assets/images/loading.gif')}
+                                style={{ width: hp(10), height: hp(10) }}
+                            />
+                        ) :
+                            recording ? (
+                                <TouchableOpacity
+                                    // className="space-y-2"
+                                    onPress={stopRecording}
+                                >
+                                    {/* recording stop button */}
+                                    <Image
+                                        className="rounded-full"
+                                        source={require('../../assets/images/voiceLoading.gif')}
+                                        style={{ width: hp(10), height: hp(10) }}
+                                    />
+                                </TouchableOpacity>
 
-                        ) : (
-                            <TouchableOpacity
-                                onPress={startRecording}
-                            >
-                                {/* recording start button */}
-                                <Image
-                                    className="rounded-full"
-                                    source={require('../../assets/images/recordingIcon.png')}
-                                    style={{ width: hp(10), height: hp(10) }}
-                                />
-                            </TouchableOpacity>
-                        )
+                            ) : (
+                                <TouchableOpacity
+                                    onPress={startRecording}
+                                >
+                                    {/* recording start button */}
+                                    <Image
+                                        className="rounded-full"
+                                        source={require('../../assets/images/recordingIcon.png')}
+                                        style={{ width: hp(10), height: hp(10) }}
+                                    />
+                                </TouchableOpacity>
+                            )
                     }
                     {
                         messages.length > 0 && (
