@@ -14,14 +14,15 @@ import Features from '../components/features'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { dummyMessages } from '../constants';
 import Voice from '@react-native-community/voice';
+import { apiCall } from '../api/openAi';
 
 
 export default function HomeScreen() {
     const [result, setResult] = useState('');
     const [recording, setRecording] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [messages, setMessages] = useState(dummyMessages);
-    const [speaking, setSpeaking] = useState(true);
+    const [messages, setMessages] = useState([]);
+    const [speaking, setSpeaking] = useState(false);
     const scrollViewRef = useRef();
 
 
@@ -59,11 +60,49 @@ export default function HomeScreen() {
         try {
             await Voice.stop();
             setRecording(false);
-            // fetchResponse();
+            fetchResponse();
         } catch (error) {
             console.log('error', error);
         }
     };
+
+
+
+    const fetchResponse = async () => {
+        if (result.trim().length > 0) {
+            setLoading(true);
+            let newMessages = [...messages];
+            newMessages.push({ role: 'user', content: result.trim() });
+            setMessages([...newMessages]);
+
+            // scroll to the bottom of the view
+            updateScrollView();
+
+            // fetching response from chatGPT with our prompt and old messages
+            apiCall(result.trim(), newMessages).then(res => {
+                console.log('got api data', res);
+                setLoading(false);
+                if (res.success) {
+                    setMessages([...res.data]);
+                    setResult('');
+                    updateScrollView();
+
+                    // now play the response to user
+                    startTextToSpeach(res.data[res.data.length - 1]);
+
+                } else {
+                    Alert.alert('Error', res.msg);
+                }
+
+            })
+        }
+    }
+
+    const updateScrollView = () => {
+        setTimeout(() => {
+            scrollViewRef?.current?.scrollToEnd({ animated: true });
+        }, 200)
+    }
 
     const clear = () => {
         // Tts.stop();
@@ -120,7 +159,7 @@ export default function HomeScreen() {
                                 style={{ height: hp(58) }}
                                 className="bg-neutral-300 rounded-3xl p-4">
                                 <ScrollView
-                                    // ref={scrollViewRef}
+                                    ref={scrollViewRef}
                                     bounces={false}
                                     className="space-y-4"
                                     showsVerticalScrollIndicator={false}
@@ -185,37 +224,37 @@ export default function HomeScreen() {
                 {/* recording, clear and stop buttons */}
                 <View className="flex justify-center items-center">
                     {
-                        // loading ? (
-                        //     <Image
-                        //         source={require('../../assets/images/loading.gif')}
-                        //         style={{ width: hp(10), height: hp(10) }}
-                        //     />
-                        // ) :
-                        recording ? (
-                            <TouchableOpacity
-                                // className="space-y-2"
-                                onPress={stopRecording}
-                            >
-                                {/* recording stop button */}
-                                <Image
-                                    className="rounded-full"
-                                    source={require('../../assets/images/voiceLoading.gif')}
-                                    style={{ width: hp(10), height: hp(10) }}
-                                />
-                            </TouchableOpacity>
+                        loading ? (
+                            <Image
+                                source={require('../../assets/images/loading.gif')}
+                                style={{ width: hp(10), height: hp(10) }}
+                            />
+                        ) :
+                            recording ? (
+                                <TouchableOpacity
+                                    // className="space-y-2"
+                                    onPress={stopRecording}
+                                >
+                                    {/* recording stop button */}
+                                    <Image
+                                        className="rounded-full"
+                                        source={require('../../assets/images/voiceLoading.gif')}
+                                        style={{ width: hp(10), height: hp(10) }}
+                                    />
+                                </TouchableOpacity>
 
-                        ) : (
-                            <TouchableOpacity
-                                onPress={startRecording}
-                            >
-                                {/* recording start button */}
-                                <Image
-                                    className="rounded-full"
-                                    source={require('../../assets/images/recordingIcon.png')}
-                                    style={{ width: hp(10), height: hp(10) }}
-                                />
-                            </TouchableOpacity>
-                        )
+                            ) : (
+                                <TouchableOpacity
+                                    onPress={startRecording}
+                                >
+                                    {/* recording start button */}
+                                    <Image
+                                        className="rounded-full"
+                                        source={require('../../assets/images/recordingIcon.png')}
+                                        style={{ width: hp(10), height: hp(10) }}
+                                    />
+                                </TouchableOpacity>
+                            )
                     }
                     {
                         messages.length > 0 && (
