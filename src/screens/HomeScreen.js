@@ -34,8 +34,8 @@ export default function HomeScreen() {
     };
     const speechResultsHandler = e => {
         console.log('speech event: ', e);
-        // const text = e.value[0];
-        // setResult(text);
+        const text = e.value[0];
+        setResult(text);
 
     };
 
@@ -67,8 +67,8 @@ export default function HomeScreen() {
 
     const clear = () => {
         // Tts.stop();
-        // setSpeaking(false);
-        // setLoading(false);
+        setSpeaking(false);
+        setLoading(false);
         setMessages([]);
     };
 
@@ -98,6 +98,8 @@ export default function HomeScreen() {
             Voice.destroy().then(Voice.removeAllListeners);
         };
     }, []);
+
+    console.log("Results", result)
 
     return (
         <View className="flex-1 bg-white">
