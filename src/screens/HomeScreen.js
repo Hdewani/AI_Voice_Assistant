@@ -21,8 +21,8 @@ export default function HomeScreen() {
     const [result, setResult] = useState('');
     const [recording, setRecording] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [messages, setMessages] = useState(dummyMessages);
-    const [speaking, setSpeaking] = useState(true);
+    const [messages, setMessages] = useState([]);
+    const [speaking, setSpeaking] = useState(false);
     const scrollViewRef = useRef();
 
 
@@ -56,21 +56,45 @@ export default function HomeScreen() {
         }
     };
     const stopRecording = async () => {
+
         try {
-            await Voice.stop(); // Assuming Voice.stop() works as expected
+            await Voice.stop();
             setRecording(false);
-            fetchResponse(); // This will call fetchResponse immediately after stopping recording, which seems fine.
+            fetchResponse();
         } catch (error) {
             console.log('error', error);
         }
     };
 
+
+
     const fetchResponse = async () => {
-        if (result.trim().length > 0) { // Make sure 'result' is defined somewhere
+        if (result.trim().length > 0) {
             setLoading(true);
             let newMessages = [...messages];
             newMessages.push({ role: 'user', content: result.trim() });
             setMessages([...newMessages]);
+
+            // scroll to the bottom of the view
+            // updateScrollView();   
+
+            // fetching response from chatGPT with our prompt and old messages
+            apiCall(result.trim(), newMessages).then(res => {
+                console.log('got api data', res);
+                // setLoading(false);
+                if (res.success) {
+                    setMessages([...res.data]);
+                    setResult('');
+                    // updateScrollView();
+
+                    // now play the response to user
+                    startTextToSpeach(res.data[res.data.length - 1]);
+
+                } else {
+                    Alert.alert('Error', res.msg);
+                }
+
+            })
         }
     }
 

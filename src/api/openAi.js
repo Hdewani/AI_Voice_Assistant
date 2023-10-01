@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { apiKey } from '../constants';
-// const { apiKey } = require('../constants')
 
 const client = axios.create({
     headers: {
