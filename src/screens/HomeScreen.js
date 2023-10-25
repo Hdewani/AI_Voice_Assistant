@@ -15,7 +15,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { dummyMessages } from '../constants';
 import Voice from '@react-native-community/voice';
 import { apiCall } from '../api/openAi';
-
+import Tts from 'react-native-tts';
 
 export default function HomeScreen() {
     const [result, setResult] = useState('');
@@ -47,7 +47,7 @@ export default function HomeScreen() {
 
     const startRecording = async () => {
         setRecording(true);
-        // Tts.stop();
+        Tts.stop();
         try {
             await Voice.start('en-US'); // en-US
 
@@ -98,6 +98,18 @@ export default function HomeScreen() {
         }
     }
 
+    const startTextToSpeach = message => {
+        if (!message.content.includes('https')) {
+            setSpeaking(true);
+            // playing response with the voice id and voice speed
+            Tts.speak(message.content, {
+                iosVoiceId: 'com.apple.ttsbundle.Samantha-compact',
+                rate: 0.5,
+            });
+        }
+    }
+
+
     const updateScrollView = () => {
         setTimeout(() => {
             scrollViewRef?.current?.scrollToEnd({ animated: true });
@@ -105,14 +117,14 @@ export default function HomeScreen() {
     }
 
     const clear = () => {
-        // Tts.stop();
+        Tts.stop();
         setSpeaking(false);
         setLoading(false);
         setMessages([]);
     };
 
     const stopSpeaking = () => {
-        // Tts.stop();
+        Tts.stop();
         setSpeaking(false);
     }
 
@@ -125,10 +137,10 @@ export default function HomeScreen() {
         Voice.onSpeechError = speechErrorHandler;
 
         // // text to speech events
-        // Tts.setDefaultLanguage('en-IE');
-        // Tts.addEventListener('tts-start', event => console.log('start', event));
-        // Tts.addEventListener('tts-finish', event => { console.log('finish', event); setSpeaking(false) });
-        // Tts.addEventListener('tts-cancel', event => console.log('cancel', event));
+        Tts.setDefaultLanguage('en-IE');
+        Tts.addEventListener('tts-start', event => console.log('start', event));
+        Tts.addEventListener('tts-finish', event => { console.log('finish', event); setSpeaking(false) });
+        Tts.addEventListener('tts-cancel', event => console.log('cancel', event));
 
 
 

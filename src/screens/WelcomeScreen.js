@@ -9,11 +9,11 @@ export default function WelcomeScreen() {
         <SafeAreaView className="flex-1 flex justify-around bg-white">
             {/* title */}
             <View className="space-y-2">
-                <Text style={{ fontSize: wp(10) }} className="text-center font-bold text-gray-800">
-                    Jarvis
+                <Text style={{ fontSize: wp(10) }} className="text-center text-gray-700 font-extrabold">
+                    ASTRA
                 </Text>
-                <Text style={{ fontSize: wp(4) }} className="text-center tracking-wider font-semibold text-gray-700">
-                    The future is here, powerd by AI.
+                <Text style={{ fontSize: wp(4) }} className="text-center tracking-wider font-semibold text-gray-500">
+                    Embracing the AI-Powered Future.
                 </Text>
             </View>
 
@@ -21,7 +21,7 @@ export default function WelcomeScreen() {
             <View className="flex-row justify-center">
                 <Image
                     source={require('../../assets/images/welcome.png')}
-                    style={{ height: wp(75), width: wp(75), flex: 1 }}
+                    style={{ height: wp(97), width: wp(75), flex: 1 }}
                 />
             </View>
 
