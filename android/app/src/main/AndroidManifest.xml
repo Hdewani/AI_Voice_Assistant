@@ -6,6 +6,7 @@
     <intent>
     <action android:name="androiad.speech.RecognitionService" />
     </intent>
+    <package android:name="com.google.android.googlequicksearchbox"/> 
     </queries>
 
     <application

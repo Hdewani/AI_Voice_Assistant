@@ -29,7 +29,7 @@ const features = [
 export default function Features() {
     return (
         <ScrollView style={{ height: hp(60) }} bounces={false} showsVerticalScrollIndicator={false} className="space-y-4">
-            <Text style={{ fontSize: wp(7.5), fontFamily: "Roboto" }} className="font-extrabold mt-2 text-center underline text-gray-800">
+            <Text style={{ fontSize: wp(7.5), fontFamily: "Roboto" }} className="font-extrabold mt-2 text-center underline text-red-700">
                 Features
             </Text>
 

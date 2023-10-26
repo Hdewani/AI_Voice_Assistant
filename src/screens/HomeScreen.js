@@ -153,23 +153,23 @@ export default function HomeScreen() {
     console.log("Results", result)
 
     return (
-        <View className="flex-1 bg-white">
+        <View className="flex-1 bg-[#E5E5E5]">
             <SafeAreaView className="flex-1 flex mx-5">
-                <View className="flex-row justify-center">
-                    <Image source={require('../../assets/images/welcome.png')} style={{ height: hp(20), width: hp(18) }} />
+                <View className="flex-row justify-center pt-8">
+                    <Image source={require('../../assets/images/ai.png')} style={{ height: hp(14), width: hp(14) }} />
 
                 </View>
 
                 {
                     messages.length > 0 ? (
                         <View className="space-y-2 flex-1">
-                            <Text className="text-green-800 font-extrabold ml-1"
+                            <Text className="text-red-700 font-extrabold ml-1"
                                 style={{ fontSize: wp(5) }}>
                                 Assistant
                             </Text>
                             <View
-                                style={{ height: hp(58) }}
-                                className="bg-neutral-300 rounded-3xl p-4">
+                                style={{ height: hp(62) }}
+                                className="bg-gray-300 rounded-3xl p-4">
                                 <ScrollView
                                     ref={scrollViewRef}
                                     bounces={false}
@@ -184,7 +184,7 @@ export default function HomeScreen() {
                                                     return (
                                                         <View key={index} className="flex-row justify-start">
                                                             <View
-                                                                className="p-2 flex rounded-2xl bg-emerald-100 rounded-tl-none">
+                                                                className="p-3 flex rounded-2xl bg-teal-100 rounded-tl-none">
                                                                 <Image
                                                                     source={{ uri: message.content }}
                                                                     className="rounded-2xl"
@@ -200,7 +200,7 @@ export default function HomeScreen() {
                                                     return (
                                                         <View
                                                             key={index} style={{ width: wp(70) }}
-                                                            className="bg-emerald-100 p-2 rounded-xl rounded-tl-none">
+                                                            className="bg-teal-100 p-2 rounded-xl rounded-tl-none">
                                                             <Text className="text-black font-black" style={{ fontSize: wp(4) }}  >
                                                                 {message.content}
                                                             </Text>
@@ -213,7 +213,7 @@ export default function HomeScreen() {
                                                     <View key={index} className="flex-row justify-end">
                                                         <View
                                                             style={{ width: wp(70) }}
-                                                            className="bg-white p-2 rounded-xl rounded-tr-none">
+                                                            className="bg-[#ABBBFF] p-2 rounded-xl rounded-tr-none">
                                                             <Text className="text-black font-black" style={{ fontSize: wp(4) }}  >
                                                                 {message.content}
                                                             </Text>
@@ -234,12 +234,12 @@ export default function HomeScreen() {
                 }
 
                 {/* recording, clear and stop buttons */}
-                <View className="flex justify-center items-center">
+                <View className="flex justify-center items-center mb-3">
                     {
                         loading ? (
                             <Image
-                                source={require('../../assets/images/loading.gif')}
-                                style={{ width: hp(10), height: hp(10) }}
+                                source={require('../../assets/images/instagram-stories.png')}
+                                style={{ width: hp(7), height: hp(7) }}
                             />
                         ) :
                             recording ? (
@@ -250,8 +250,8 @@ export default function HomeScreen() {
                                     {/* recording stop button */}
                                     <Image
                                         className="rounded-full"
-                                        source={require('../../assets/images/voiceLoading.gif')}
-                                        style={{ width: hp(10), height: hp(10) }}
+                                        source={require('../../assets/images/record.png')}
+                                        style={{ width: hp(8), height: hp(8) }}
                                     />
                                 </TouchableOpacity>
 
@@ -261,9 +261,9 @@ export default function HomeScreen() {
                                 >
                                     {/* recording start button */}
                                     <Image
-                                        className="rounded-full"
-                                        source={require('../../assets/images/recordingIcon.png')}
-                                        style={{ width: hp(10), height: hp(10) }}
+                                        className="rounded-full mb-4 bg-[#F0FBFF] px-4"
+                                        source={require('../../assets/images/voice-recording.png')}
+                                        style={{ width: hp(7), height: hp(7) }}
                                     />
                                 </TouchableOpacity>
                             )
@@ -272,7 +272,7 @@ export default function HomeScreen() {
                         messages.length > 0 && (
                             <TouchableOpacity
                                 onPress={clear}
-                                className="bg-neutral-400 rounded-3xl p-2 absolute right-10"
+                                className="bg-[#003954] rounded-3xl p-2 absolute right-10"
                             >
                                 <Text className="text-white font-semibold">Clear</Text>
                             </TouchableOpacity>
@@ -288,16 +288,9 @@ export default function HomeScreen() {
                             </TouchableOpacity>
                         )
                     }
-
-
-
                 </View>
-
-
-
-
             </SafeAreaView>
-            <Text>HomeScreen</Text>
+
         </View>
     );
 }
